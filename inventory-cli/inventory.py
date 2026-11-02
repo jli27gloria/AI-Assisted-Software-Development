@@ -55,7 +55,7 @@ def list_products():
     for p in products:
         print(f'#{p["id"]} {p["item_name"]} | ${p["price"]:.2f} | stock: {p["in_stock"]} | {p["date"]}')
 
-# Print all products
+# Print one product's details
 def get_product(product_id):
     products = load_products()
     p = find_product(products, product_id)
