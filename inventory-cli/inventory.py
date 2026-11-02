@@ -5,19 +5,19 @@ from datetime import date
 
 DATA_FILE = "products.json"
 
+# Load products from JSON; return [] if file doesn't exist
 def load_products():
     if not os.path.exists(DATA_FILE):
         return []
     with open(DATA_FILE, "r") as f:
         return json.load(f)
 
+# Save all products to JSON
 def save_products(products):
     with open(DATA_FILE, "w") as f:
         json.dump(products, f, indent=2)
 
-
-# add a new product to the inventory
-
+# Add a product with auto id (max + 1) and today's date
 def add_product(item_name, description, price, in_stock):
     products = load_products()
 
@@ -39,17 +39,14 @@ def add_product(item_name, description, price, in_stock):
     save_products(products)
     print(f"Added product #{new_id}: {item_name}")
 
-
-
-
-
+# Find a product by id; return None if not found
 def find_product(products, product_id):
     for p in products:
         if p["id"] == product_id:
             return p
     return None
 
-
+# Print all products
 def list_products():
     products = load_products()
     if not products:
@@ -58,7 +55,7 @@ def list_products():
     for p in products:
         print(f'#{p["id"]} {p["item_name"]} | ${p["price"]:.2f} | stock: {p["in_stock"]} | {p["date"]}')
 
-
+# Print all products
 def get_product(product_id):
     products = load_products()
     p = find_product(products, product_id)
@@ -67,7 +64,7 @@ def get_product(product_id):
         return
     print(json.dumps(p, indent=2))
 
-
+# Delete a product by id
 def delete_product(product_id):
     products = load_products()
     p = find_product(products, product_id)
@@ -78,7 +75,7 @@ def delete_product(product_id):
     save_products(products)
     print(f"Deleted product #{product_id}.")
 
-
+# Update only the fields provided
 def update_product(product_id, item_name=None, description=None, price=None, in_stock=None):
     products = load_products()
     p = find_product(products, product_id)
@@ -98,6 +95,7 @@ def update_product(product_id, item_name=None, description=None, price=None, in_
     save_products(products)
     print(f"Updated product #{product_id}.")
 
+# Parse CLI arguments and run the matching command
 def main():
     parser = argparse.ArgumentParser(description="Product inventory CLI")
     sub = parser.add_subparsers(dest="command", required=True)
